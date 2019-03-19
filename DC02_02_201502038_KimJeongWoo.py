@@ -136,4 +136,6 @@ def convert_ip(data):
 recv_socket = socket.socket(socket.AF_PACKET,socket.SOCK_RAW,socket.ntohs(0x800))
 
 data = recv_socket.recvfrom(20000)
-parsing_ip_header(data[0][0:54])
+
+while True:
+    parsing_ip_header(data[0][0:54])
