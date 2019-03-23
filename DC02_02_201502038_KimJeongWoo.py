@@ -46,7 +46,6 @@ def parsing_ip_header(data):
     urgentpointer = convert_ip_int(ip_header[37:38])
    
     print("===============ETH===============")
-    print(ip_header)
     print("src_mac_address: ",ether_src)
     print("dest_mac_address: ",ether_dest)
     print("IP Header: ",ip_head)
@@ -137,4 +136,5 @@ def convert_ip(data):
 recv_socket = socket.socket(socket.PF_PACKET,socket.SOCK_RAW,socket.ntohs(0x0800))
 
 data = recv_socket.recvfrom(65565)
-parsing_ip_header(data[0][0:54])
+while True:
+	parsing_ip_header(data[0][0:54])
