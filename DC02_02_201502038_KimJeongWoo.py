@@ -5,7 +5,7 @@ def parsing_ip_header(data):
     ip_header = struct.unpack("!6c6c2cccHHHccHccccccccHHIIHHHH",data)
     ether_src = convert_ip_address(ip_header[0:6])
     ether_dest = convert_ip_address(ip_header[6:12])
-    ip_head = "0x"+ip_header[12].hex()
+    ip_head = "0x"+convert_ip_address(ip_header[12:13])
     ip_version = int(convert_ip_address(ip_header[14:15]),16) >> 4
     ip_HLEN = int(convert_ip_address(ip_header[14:15]),16) & 0xf
     differentiated_service_codepoint = int(convert_ip_address(ip_header[15:16]),16) >> 2 
@@ -46,6 +46,7 @@ def parsing_ip_header(data):
     urgentpointer = convert_ip_int(ip_header[37:38])
    
     print("===============ETH===============")
+    print(ip_header)
     print("src_mac_address: ",ether_src)
     print("dest_mac_address: ",ether_dest)
     print("IP Header: ",ip_head)
@@ -68,7 +69,7 @@ def parsing_ip_header(data):
     print("fragments: ",fragments)
     print("fragments_offset: ",fragments_offset)
     print("Time_to_live: ",Time_to_live)
-    print("Protocol",Protocol)
+    print("Protocol",int(Protocol,16))
     print("Header_checksum",Header_checksum)
     print("source_ip: ",source_ip)
     print("dest_ip: ",dest_ip)
@@ -133,9 +134,7 @@ def convert_ip(data):
         ip.append(int(i.hex(),16))
     return ip
 
-recv_socket = socket.socket(socket.AF_PACKET,socket.SOCK_RAW,socket.ntohs(0x800))
+recv_socket = socket.socket(socket.PF_PACKET,socket.SOCK_RAW,socket.ntohs(0x0800))
 
-data = recv_socket.recvfrom(20000)
-
-while True:
-    parsing_ip_header(data[0][0:54])
+data = recv_socket.recvfrom(65565)
+parsing_ip_header(data[0][0:54])
